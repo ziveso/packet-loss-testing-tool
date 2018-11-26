@@ -16,13 +16,13 @@ app.get("/routerIP", async (req, res) => {
 })
 
 app.get("/pingIP/:ip", async (req, res) => {
-  const ping = pingIP(req.params.ip, req.body.time).then((data) => {
+  const ping = pingIP(req.params.ip, parseInt(req.query.time)).then((data) => {
     res.send(data)
   })
 })
 
-app.get("/getIP", async (req, res) => {
-  const ip = getIP(req.body.url).then((data) => {
+app.get("/getIP/:url", async (req, res) => {
+  const ip = getIP(req.params.url).then((data) => {
     res.send(data)
   })
 })
