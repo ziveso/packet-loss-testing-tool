@@ -1,0 +1,15 @@
+{
+  "name": "api",
+  "version": "1.0.0",
+  "main": "app.js",
+  "license": "MIT",
+  "private": false,
+  "dependencies": {
+    "express": "^4.16.4",
+    "firebase-server": "^1.0.0"
+  },
+  "scripts": {
+    "start": "node app.js",
+    "start:nodemon": "nodemon app.js"
+  }
+}
