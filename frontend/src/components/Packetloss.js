@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { observer } from "mobx-react";
-import { Button, Radio } from "antd";
+import { Button, Radio, Progress } from "antd";
 
 const RadioGroup = Radio.Group;
 const radioStyle = {
@@ -13,41 +13,52 @@ export class Packetloss extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: "",
-      loss: "0"
+      loss: "0",
+      pinging: false
     };
     this.onChange = this.onChange.bind(this);
     this.ping = this.ping.bind(this);
   }
 
   onChange(e) {
-    this.setState({
-      value: e.target.value
-    });
+    this.props.store.selectedValue.set(e.target.value);
   }
 
   ping() {
+    this.setState({ pinging: true });
     this.props.store
-      .ping(this.state.value)
-      .then(res => this.setState({ loss: res }));
+      .ping(this.props.store.selectedValue.get())
+      .then(res => this.setState({ loss: res, pinging: false }));
   }
 
   render() {
-    const _Radio = this.props.store.pingip.map((item, index) => {
+    const _Radio = this.props.store.ips.map((item, index) => {
       return (
         <Radio style={radioStyle} value={item.value} key={`radio${index}`}>
           {item.value} : <b>{item.name}</b>
         </Radio>
       );
     });
-
     return (
-      <div style={{ marginTop: "50px" }}>
-        <RadioGroup onChange={this.onChange} value={this.state.value}>
+      <div style={{ textAlign: "left", padding: "0 30px" }}>
+        <RadioGroup
+          onChange={this.onChange}
+          value={this.props.store.selectedValue.get()}
+        >
           {_Radio}
         </RadioGroup>
-        <Button onClick={this.ping}>Check</Button>
-        <div>Packetloss found {this.state.loss}</div>
+        <br />
+        <Button onClick={this.ping} loading={this.state.pinging}>
+          Check
+        </Button>
+        {this.props.store.progress.get() === 0 ? null : (
+          <div style={{ width: "250px" }}>
+            <Progress percent={this.props.store.progress.get()} />
+          </div>
+        )}
+        {this.state.loss !== "0" ? (
+          <div>Packet loss : {this.state.loss}</div>
+        ) : null}
       </div>
     );
   }

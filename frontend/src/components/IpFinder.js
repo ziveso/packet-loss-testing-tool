@@ -13,6 +13,7 @@ export class IpFinder extends Component {
     };
     this.onClick = this.onClick.bind(this);
   }
+  
   onClick(value) {
     this.setState({ url: value });
     this.props.store.findIp(value).then(res => {
@@ -22,7 +23,7 @@ export class IpFinder extends Component {
   render() {
     return (
       <div>
-        <div style={{ maxWidth: "400px" }}>
+        <div style={{ maxWidth: "400px", margin: "auto" }}>
           <Search
             placeholder="custom address"
             enterButton="Find address"

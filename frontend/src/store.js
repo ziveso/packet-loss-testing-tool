@@ -6,19 +6,39 @@ function getRouterIp() {
 }
 
 class Store {
+  loading = observable.box("false");
+  routerIp = observable.box("");
+  ips = observable([]);
+  selectedValue = observable.box("");
+  progress = observable.box(0);
+
   constructor() {
     getRouterIp().then(res => {
       this.routerIp.set(res.data);
-      this.pingip[0] = { name: "router ip", value: res.data };
+      this.ips[0] = { name: "router ip", value: res.data };
+      this.selectedValue.set(res.data);
     });
   }
 
   ping = address => {
-    console.log(address);
+    const time = 10;
+    let count = time;
+    const progress = setInterval(() => {
+      this.progress.set((time - count) * time);
+      count -= 1;
+      if (count <= 0) {
+        this.progress.set(0);
+        clearInterval(progress);
+      }
+    }, 1000);
     return new Promise((resolved, reject) => {
       axios
-        .get("/pingIp/" + address + "?time=10")
-        .then(res => resolved(res.data))
+        .get("/pingIp/" + address + `?time=${time}`)
+        .then(res => {
+          clearInterval(progress);
+          this.progress.set(100);
+          resolved(res.data);
+        })
         .catch(err => reject(err));
     });
   };
@@ -28,7 +48,7 @@ class Store {
       axios
         .get("/getIP/" + url)
         .then(res => {
-          this.pingip[this.pingip.length] = { name: url, value: res.data };
+          this.ips[this.ips.length] = { name: url, value: res.data };
           resolved(res.data);
         })
         .catch(err => {
@@ -36,10 +56,6 @@ class Store {
         });
     });
   };
-
-  loading = observable.box("false");
-  routerIp = observable.box("");
-  pingip = observable([]);
 }
 
 export default Store;
