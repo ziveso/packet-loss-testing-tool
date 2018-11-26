@@ -55,8 +55,6 @@ function ValidateIPaddress(ipaddress) {
     return (true)  
   }  
   return (false)  
-}  
-
-const cmd = "ping -c 10 localhost";
+} 
 
 module.exports = {getIP, pingIP, routerIP}

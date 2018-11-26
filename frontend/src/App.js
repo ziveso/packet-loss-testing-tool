@@ -3,6 +3,7 @@ import { observer } from "mobx-react";
 import { Row, Col } from "antd";
 import IpFinder from "./components/IpFinder";
 import Packetloss from "./components/Packetloss";
+// import Graph from './components/Graph'
 import Store from "./store";
 import "./App.css";
 
@@ -15,7 +16,7 @@ class App extends Component {
         <h1>Packet loss testing tool</h1>
         <div>Your router ip address is : {store.routerIp.get()}</div>
         <div>Your ip adress is : </div>
-        <Row style={{ marginTop: "20px" }}>
+        <Row style={{ margin: "20px 0" }}>
           <Col md={12}>
             <Packetloss store={store} />
           </Col>
@@ -23,6 +24,7 @@ class App extends Component {
             <IpFinder store={store} />
           </Col>
         </Row>
+        {/* <Graph store={store} /> */}
       </div>
     );
   }

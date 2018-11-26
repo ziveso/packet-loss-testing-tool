@@ -21,12 +21,12 @@ class Store {
   }
 
   ping = address => {
-    const time = 10;
-    let count = time;
+    const time = 30;
+    let count = 1;
     const progress = setInterval(() => {
-      this.progress.set((time - count) * time);
-      count -= 1;
-      if (count <= 0) {
+      this.progress.set((count * 100) / time);
+      count += 1;
+      if (count > time) {
         this.progress.set(0);
         clearInterval(progress);
       }
@@ -39,7 +39,9 @@ class Store {
           this.progress.set(100);
           resolved(res.data);
         })
-        .catch(err => reject(err));
+        .catch(err => {
+          reject(err);
+        });
     });
   };
 
