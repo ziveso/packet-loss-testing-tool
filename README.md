@@ -3,8 +3,8 @@
 ## task
 
  - [x] find router route // node
- - [-] ping on router route or custom URL // node and react (input)
- - [ ] record how many packet loss in one minute or custom time
+ - [x] ping on router route or custom URL // node and react (input)
+ - [x] record how many packet loss in one minute or custom time
  - [ ] show how many packet loss from record
  - [x] init database
  - [ ] add stats to database
