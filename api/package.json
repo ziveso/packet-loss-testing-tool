@@ -6,7 +6,9 @@
   "private": false,
   "dependencies": {
     "express": "^4.16.4",
-    "firebase-server": "^1.0.0"
+    "firebase": "^5.5.9",
+    "firebase-server": "^1.0.0",
+    "moment": "^2.22.2"
   },
   "scripts": {
     "start": "node app.js",

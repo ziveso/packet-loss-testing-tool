@@ -1,6 +1,7 @@
 const FirebaseServer = require("firebase-server");
+const firebase = require("firebase");
 
-function initDatabase(databasePort) {
+function initDatabaseServer(databasePort) {
   return new Promise((resolved, reject) => {
     try {
       new FirebaseServer(databasePort, "localhost");
@@ -11,4 +12,17 @@ function initDatabase(databasePort) {
   });
 }
 
-module.exports = initDatabase;
+function connectDatabase(databasePort) {
+  return new Promise((resolved, reject) => {
+    try {
+      firebase.initializeApp({
+        databaseURL: `ws://localhost:5556`
+      });
+    } catch (err) {
+      reject(err);
+    }
+    resolved("conencted to firebase");
+  });
+}
+
+module.exports = { initDatabaseServer, connectDatabase };
