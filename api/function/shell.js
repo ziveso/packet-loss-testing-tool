@@ -15,7 +15,7 @@ function getIP() {
     exec('netstat -nr | grep default', (error, stdout, stderr) => {
       if(error) return reject(false)
       if(stderr) return reject(false)
-      const ip = stdout.trim().split(" ")
+      const ip = stdout.split(" ")
       for(var i = 0; i < ip.length; i++) {
         if(ValidateIPaddress(ip[i])) {
           resolve(ip[i])
@@ -26,12 +26,14 @@ function getIP() {
   })
 }
 
-function pingIP(ipaddress) {
+function pingIP(ipaddress, numberOfTimes) {
   return new Promise((resolve, reject) => {
-    exec(`ping -c ${ipaddress}`, (error, stdout, stderr) => {
+    exec(`ping -c ${numberOfTimes} ${ipaddress}`, (error, stdout, stderr) => {
       if (error) return reject(false);
       if (stderr) return reject(false);
-      resolve(stdout);
+      const output = stdout.split("\n")
+      const stat = output[numberOfTimes + 3].split(" ")
+      resolve(stat[6]);
     });
   });
 }
@@ -45,4 +47,4 @@ function ValidateIPaddress(ipaddress) {
 
 const cmd = "ping -c 10 localhost";
 
-module.exports = {getIP}
+module.exports = {getIP, pingIP}

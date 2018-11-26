@@ -16,7 +16,7 @@ app.get("/routerIP", async (req, res) => {
 })
 
 app.get("/ping", async (req, res) => {
-  const ping = pingIP().then((data) => {
+  const ping = pingIP("10.2.0.1", 10).then((data) => {
     res.send(data)
   })
 })
