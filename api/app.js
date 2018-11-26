@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const { getIP } = require("./function/shell.js");
 
 const initDatabase = require("./db");
 const databasePort = process.env.databasePort || "5556";
@@ -7,6 +8,13 @@ const databasePort = process.env.databasePort || "5556";
 app.get("/", async (req, res) => {
   res.send("welcome to packet-loss-testing-tools api");
 });
+
+app.get("/ip", async (req, res) => {
+  const ip = getIP().then((data) => {
+    console.log(data)
+    res.send(data)
+  })
+})
 
 initDatabase(databasePort).then(res => {
   console.log(res);
