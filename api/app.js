@@ -9,7 +9,7 @@ app.get("/", async (req, res) => {
   res.send("welcome to packet-loss-testing-tools api");
 });
 
-app.get("/ip", async (req, res) => {
+app.get("/routerIP", async (req, res) => {
   const ip = getIP().then((data) => {
     res.send(data)
   })
@@ -21,9 +21,6 @@ app.get("/ping", async (req, res) => {
   })
 })
 
-initDatabase(databasePort).then(res => {
-  console.log(res);
-});
 initDatabaseServer(databasePort)
   .then(res => {
     console.log(res);
