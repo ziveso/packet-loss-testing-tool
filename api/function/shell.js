@@ -10,7 +10,7 @@ function echo() {
   });
 }
 
-function getIP() {
+function routerIP() {
   return new Promise((resolve, reject) => {
     exec('netstat -nr | grep default', (error, stdout, stderr) => {
       if(error) return reject(false)
@@ -38,6 +38,18 @@ function pingIP(ipaddress, numberOfTimes) {
   });
 }
 
+function getIP(url) {
+  return new Promise((resolve, reject) => {
+    exec(`nslookup ${url}`, (error, stdout, stderr) => {
+      if (error) return reject(false);
+      if (stderr) return reject(false);
+      const output = stdout.split(" ")
+      const ip = output[output.length - 1]
+      resolve(ip);
+    });
+  });
+}
+
 function ValidateIPaddress(ipaddress) {  
   if (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipaddress)) {  
     return (true)  
@@ -47,4 +59,4 @@ function ValidateIPaddress(ipaddress) {
 
 const cmd = "ping -c 10 localhost";
 
-module.exports = {getIP, pingIP}
+module.exports = {getIP, pingIP, routerIP}
