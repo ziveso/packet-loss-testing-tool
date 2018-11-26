@@ -1,28 +1,23 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import { observer } from "mobx-react";
+import IpFinder from "./components/IpFinder";
+import Packetloss from "./components/Packetloss";
+import Store from "./store";
+import "./App.css";
+
+const store = new Store();
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <div>
+        <h1>Packet loss testing tool</h1>
+        <div>Your router ip address is : {store.routerIp.get()}</div>
+        <IpFinder store={store} />
+        <Packetloss store={store} />
       </div>
     );
   }
 }
 
-export default App;
+export default observer(App);
