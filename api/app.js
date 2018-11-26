@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const { getIP } = require("./function/shell.js");
+const { getIP, pingIP } = require("./function/shell.js");
 
 const { initDatabaseServer, connectDatabase } = require("./db");
 const databasePort = process.env.databasePort || "5556";
@@ -11,7 +11,12 @@ app.get("/", async (req, res) => {
 
 app.get("/ip", async (req, res) => {
   const ip = getIP().then((data) => {
-    console.log(data)
+    res.send(data)
+  })
+})
+
+app.get("/ping", async (req, res) => {
+  const ping = pingIP().then((data) => {
     res.send(data)
   })
 })

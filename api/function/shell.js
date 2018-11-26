@@ -26,6 +26,16 @@ function getIP() {
   })
 }
 
+function pingIP(ipaddress) {
+  return new Promise((resolve, reject) => {
+    exec(`ping -c ${ipaddress}`, (error, stdout, stderr) => {
+      if (error) return reject(false);
+      if (stderr) return reject(false);
+      resolve(stdout);
+    });
+  });
+}
+
 function ValidateIPaddress(ipaddress) {  
   if (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipaddress)) {  
     return (true)  
