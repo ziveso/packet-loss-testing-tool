@@ -35,21 +35,21 @@ export class IpFinder extends Component {
     this.setState({ url: value });
     this.props.store.findIp(value).then(res => {
       this.setState({ address: res });
+      axios
+        .get(
+          `http://api.ipstack.com/${res}?access_key=1d720daed8a4c53e8dbed3eae9252b82`
+        )
+        .then(res => {
+          console.log(res.data);
+          const marker = {
+            markerOffset: -25,
+            name: res.data.country_name,
+            coordinates: [res.data.longitude, res.data.latitude]
+          };
+          this.setState({ markers: [marker] });
+        })
+        .catch(err => console.log(err));
     });
-    axios
-      .get(
-        `http://api.ipstack.com/${value}?access_key=1d720daed8a4c53e8dbed3eae9252b82`
-      )
-      .then(res => {
-        console.log(res.data);
-        const marker = {
-          markerOffset: -25,
-          name: res.data.country_name,
-          coordinates: [res.data.longitude, res.data.latitude]
-        };
-        this.setState({ markers: [marker] });
-      })
-      .catch(err => console.log(err));
   }
 
   render() {
