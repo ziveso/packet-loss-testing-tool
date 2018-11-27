@@ -13,45 +13,48 @@ function echo() {
 
 function routerIP(os) {
   return new Promise((resolve, reject) => {
-    if (os.substring(0, 3) === 'Mac') {
-      exec('netstat -nr | grep default', (error, stdout, stderr) => {
-        if (error) return reject(error)
-        if (stderr) return reject(stderr)
-        const ip = stdout.split(" ")
+    if (os.substring(0, 3) === "Mac") {
+      exec("netstat -nr | grep default", (error, stdout, stderr) => {
+        if (error) return reject(error);
+        if (stderr) return reject(stderr);
+        const ip = stdout.split(" ");
         for (var i = 0; i < ip.length; i++) {
           if (ValidateIPaddress(ip[i])) {
-            resolve(ip[i])
+            resolve(ip[i]);
           }
         }
-        reject(error)
-      })
+        reject(error);
+      });
     } else {
-      exec('ipconfig', (error, stdout, stderr) => {
-        if(error) return reject(error)
-        if(stderr) return reject(stderr)
-        const output = stdout.split("\n")
-        const ip = output[40].trim().split(":")
-        resolve(ip[1].trim())
-      })
+      exec("ipconfig", (error, stdout, stderr) => {
+        if (error) return reject(error);
+        if (stderr) return reject(stderr);
+        const output = stdout.split("\n");
+        const ip = output[40].trim().split(":");
+        resolve(ip[1].trim());
+      });
     }
-  })
+  });
 }
 
 function myIP() {
   return new Promise((resolved, reject) => {
-    axios.get('https://api.ipify.org?format=json').then(({ data }) => {
-      resolved(data.ip)
-    }).catch(err => reject(err))
-  })
+    axios
+      .get("https://api.ipify.org?format=json")
+      .then(({ data }) => {
+        resolved(data.ip);
+      })
+      .catch(err => reject(err));
+  });
 }
 
 function pingIP(ipaddress, numberOfTimes) {
   return new Promise((resolve, reject) => {
-    exec(`ping -n ${numberOfTimes} ${ipaddress}`, (error, stdout, stderr) => {
+    exec(`ping -c ${numberOfTimes} ${ipaddress}`, (error, stdout, stderr) => {
       if (error) return reject(error);
       if (stderr) return reject(stderr);
-      const output = stdout.split("\n")
-      const stat = output[numberOfTimes + 3].split(" ")
+      const output = stdout.split("\n");
+      const stat = output[numberOfTimes + 3].split(" ");
       resolve(stat[6]);
     });
   });
@@ -60,22 +63,26 @@ function pingIP(ipaddress, numberOfTimes) {
 function getIP(url) {
   return new Promise((resolve, reject) => {
     exec(`nslookup ${url}`, (error, stdout, stderr) => {
-      if (error) return reject("err",error);
-      if (stderr) return reject("stderr",stderr);
-      const output = stdout.split(" ")
-      const ip = output[output.length - 1]
+      if (error) return reject("err", error);
+      if (stderr) return reject("stderr", stderr);
+      const output = stdout.split(" ");
+      const ip = output[output.length - 1];
       resolve(ip);
     });
   });
 }
 
 function ValidateIPaddress(ipaddress) {
-  if (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipaddress)) {
-    return (true)
+  if (
+    /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(
+      ipaddress
+    )
+  ) {
+    return true;
   }
-  return (false)
+  return false;
 }
 
 const cmd = "ping -c 10 localhost";
 
-module.exports = { getIP, pingIP, routerIP, myIP }
+module.exports = { getIP, pingIP, routerIP, myIP };
