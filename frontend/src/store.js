@@ -46,6 +46,10 @@ class Store {
   };
 
   findIp = url => {
+    if (ValidateIPaddress(url)) {
+      this.ips[this.ips.length] = { value: url };
+      new Promise(resolved => resolved(url));
+    }
     return new Promise((resolved, reject) => {
       axios
         .get("/getIP/" + url)
@@ -58,6 +62,17 @@ class Store {
         });
     });
   };
+}
+
+function ValidateIPaddress(ipaddress) {
+  if (
+    /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(
+      ipaddress
+    )
+  ) {
+    return true;
+  }
+  return false;
 }
 
 export default Store;
