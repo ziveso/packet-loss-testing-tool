@@ -18,7 +18,7 @@ app.get('/list', async (req,res) => {
 })
 
 app.get("/routerIP", async (req, res) => {
-  const ip = routerIP('MacIntel').then((data) => {
+  const ip = routerIP(req.query.os).then((data) => {
     res.send(data)
   }).catch(err => console.error(err))
 })
