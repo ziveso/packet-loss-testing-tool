@@ -26,12 +26,12 @@ function routerIP(os) {
         reject(false)
       })
     } else {
-      exec('netstat -nr', (error, stdout, stderr) => {
+      exec('ipconfig', (error, stdout, stderr) => {
         if(error) return reject(false)
         if(stderr) return reject(false)
         const output = stdout.split("\n")
-        const ip = output[15].trim().split(/  /g)
-        resolve(ip[7])
+        const ip = output[13].trim().split(":")
+        resolve(ip[1].trim())
       })
     }
   })

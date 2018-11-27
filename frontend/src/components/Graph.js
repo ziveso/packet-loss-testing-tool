@@ -29,9 +29,11 @@ export class Graph extends Component {
       .on("value", snap => {
         // const data = snap.map(item => item.val());
         const res = snap.val();
+        if (res) {
         data.labels = Object.keys(res);
-        const values = Object.values(res);
-        data.datasets = [{ ...data.datasets[0], data: values }];
+          const values = Object.values(res);
+          data.datasets = [{ ...data.datasets[0], data: values }];
+        }
       });
   }
 
@@ -48,8 +50,8 @@ export class Graph extends Component {
         {!this.props.store.continuous.get() ? (
           <Button onClick={this.start}>check continuously</Button>
         ) : (
-          <Button onClick={this.stop}>Stop</Button>
-        )}
+            <Button onClick={this.stop}>Stop</Button>
+          )}
         <div style={{ maxWidth: "500px", margin: "auto" }}>
           <Line data={data} />
         </div>
