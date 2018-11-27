@@ -20,20 +20,20 @@ app.get('/list', async (req,res) => {
 app.get("/routerIP", async (req, res) => {
   const ip = routerIP().then((data) => {
     res.send(data)
-  })
+  }).catch(err => console.error(err))
 })
 
 app.get("/pingIP/:ip", async (req, res) => {
   const ping = pingIP(req.params.ip, parseInt(req.query.time)).then((data) => {
     set(moment().format('YYYY-MM-DD-HH:mm'), data)
     res.send(data)
-  })
+  }).catch(err => console.error(err))
 })
 
 app.get("/getIP/:url", async (req, res) => {
   const ip = getIP(req.params.url).then((data) => {
     res.send(data)
-  })
+  }).catch(err => console.error(err))
 })
 
 initDatabaseServer(databasePort)
