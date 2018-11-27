@@ -4,8 +4,8 @@ const axios = require("axios");
 function echo() {
   return new Promise((resolve, reject) => {
     exec('echo "helloworld"', (error, stdout, stderr) => {
-      if (error) return reject(false);
-      if (stderr) return reject(false);
+      if (error) return reject(error);
+      if (stderr) return reject(stderr);
       resolve(stdout);
     });
   });
@@ -15,22 +15,22 @@ function routerIP(os) {
   return new Promise((resolve, reject) => {
     if (os.substring(0, 3) === 'Mac') {
       exec('netstat -nr | grep default', (error, stdout, stderr) => {
-        if (error) return reject(false)
-        if (stderr) return reject(false)
+        if (error) return reject(error)
+        if (stderr) return reject(stderr)
         const ip = stdout.split(" ")
         for (var i = 0; i < ip.length; i++) {
           if (ValidateIPaddress(ip[i])) {
             resolve(ip[i])
           }
         }
-        reject(false)
+        reject(error)
       })
     } else {
       exec('ipconfig', (error, stdout, stderr) => {
-        if(error) return reject(false)
-        if(stderr) return reject(false)
+        if(error) return reject(error)
+        if(stderr) return reject(stderr)
         const output = stdout.split("\n")
-        const ip = output[13].trim().split(":")
+        const ip = output[40].trim().split(":")
         resolve(ip[1].trim())
       })
     }
@@ -47,9 +47,9 @@ function myIP() {
 
 function pingIP(ipaddress, numberOfTimes) {
   return new Promise((resolve, reject) => {
-    exec(`ping -c ${numberOfTimes} ${ipaddress}`, (error, stdout, stderr) => {
-      if (error) return reject(false);
-      if (stderr) return reject(false);
+    exec(`ping -n ${numberOfTimes} ${ipaddress}`, (error, stdout, stderr) => {
+      if (error) return reject(error);
+      if (stderr) return reject(stderr);
       const output = stdout.split("\n")
       const stat = output[numberOfTimes + 3].split(" ")
       resolve(stat[6]);
@@ -60,8 +60,8 @@ function pingIP(ipaddress, numberOfTimes) {
 function getIP(url) {
   return new Promise((resolve, reject) => {
     exec(`nslookup ${url}`, (error, stdout, stderr) => {
-      if (error) return reject(false);
-      if (stderr) return reject(false);
+      if (error) return reject("err",error);
+      if (stderr) return reject("stderr",stderr);
       const output = stdout.split(" ")
       const ip = output[output.length - 1]
       resolve(ip);

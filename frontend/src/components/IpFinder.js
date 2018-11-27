@@ -35,7 +35,7 @@ export class IpFinder extends Component {
     this.setState({ url: value });
     this.props.store.findIp(value).then(res => {
       this.setState({ address: res });
-    });
+    })
     axios
       .get(
         `http://api.ipstack.com/${value}?access_key=1d720daed8a4c53e8dbed3eae9252b82`
