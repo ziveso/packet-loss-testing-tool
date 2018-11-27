@@ -5,12 +5,12 @@ import { Line } from "react-chartjs-2";
 import firebase from "firebase";
 
 const data = {
-  labels: ["January", "February", "March", "April", "May", "June", "July"],
+  labels: [],
   datasets: [
     {
-      label: "My First dataset",
+      label: "graph",
       fill: false,
-      data: [65, 59, 80, 81, 56, 55, 40]
+      data: []
     }
   ]
 };
@@ -28,7 +28,10 @@ export class Graph extends Component {
       .ref("/")
       .on("value", snap => {
         // const data = snap.map(item => item.val());
-        console.log(snap.val());
+        const res = snap.val();
+        data.labels = Object.keys(res);
+        const values = Object.values(res);
+        data.datasets = [{ ...data.datasets[0], data: values }];
       });
   }
 

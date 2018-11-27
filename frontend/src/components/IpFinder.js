@@ -47,7 +47,7 @@ export class IpFinder extends Component {
           name: res.data.country_name,
           coordinates: [res.data.longitude, res.data.latitude]
         };
-        this.setState({ markers: marker });
+        this.setState({ markers: [marker] });
       })
       .catch(err => console.log(err));
   }
