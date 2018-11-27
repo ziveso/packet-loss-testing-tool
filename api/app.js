@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const { getIP, pingIP, routerIP } = require("./function/shell.js");
+const { getIP, pingIP, routerIP, myIP } = require("./function/shell.js");
 const moment = require("moment");
 const { list, set } = require("./db/fundamental.js")
 
@@ -18,7 +18,7 @@ app.get('/list', async (req,res) => {
 })
 
 app.get("/routerIP", async (req, res) => {
-  const ip = routerIP().then((data) => {
+  const ip = routerIP('MacIntel').then((data) => {
     res.send(data)
   }).catch(err => console.error(err))
 })
@@ -32,6 +32,12 @@ app.get("/pingIP/:ip", async (req, res) => {
 
 app.get("/getIP/:url", async (req, res) => {
   const ip = getIP(req.params.url).then((data) => {
+    res.send(data)
+  }).catch(err => console.error(err))
+})
+
+app.get("/myIP", async (req, res) => {
+  const myIp = myIP().then((data) => {
     res.send(data)
   }).catch(err => console.error(err))
 })

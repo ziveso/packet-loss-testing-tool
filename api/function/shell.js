@@ -1,4 +1,5 @@
 const exec = require("child_process").exec;
+const axios = require("axios");
 
 function echo() {
   return new Promise((resolve, reject) => {
@@ -10,20 +11,41 @@ function echo() {
   });
 }
 
-function routerIP() {
+function routerIP(os) {
   return new Promise((resolve, reject) => {
-    exec('netstat -nr | grep default', (error, stdout, stderr) => {
-      if(error) return reject(false)
-      if(stderr) return reject(false)
-      const ip = stdout.split(" ")
-      for(var i = 0; i < ip.length; i++) {
-        if(ValidateIPaddress(ip[i])) {
-          resolve(ip[i])
+    if(os.substring(0,3) === 'Mac') {
+      exec('netstat -nr | grep default', (error, stdout, stderr) => {
+        if(error) return reject(false)
+        if(stderr) return reject(false)
+        const ip = stdout.split(" ")
+        for(var i = 0; i < ip.length; i++) {
+          if(ValidateIPaddress(ip[i])) {
+            resolve(ip[i])
+          }
         }
-      }
-      reject(false)
-    })
+        reject(false)
+      })
+    } else {
+      exec('netstat -nr', (error, stdout, stderr) => {
+        if(error) return reject(false)
+        if(stderr) return reject(false)
+        const ip = stdout.split("/n")
+        resolve(ip)
+        // for(var i = 0; i < ip.length; i++) {
+        //   if(ValidateIPaddress(ip[i])) {
+        //     resolve(ip[i])
+        //   }
+        // }
+        // reject(false)
+      })
+    }
   })
+}
+
+function myIP() {
+  axios.get('https://api.ipify.org?format=json').then(({data}) => {
+    return data.ip;
+  });
 }
 
 function pingIP(ipaddress, numberOfTimes) {
@@ -55,6 +77,8 @@ function ValidateIPaddress(ipaddress) {
     return (true)  
   }  
   return (false)  
-} 
+}  
+
+const cmd = "ping -c 10 localhost";
 
 module.exports = {getIP, pingIP, routerIP}
