@@ -21,7 +21,7 @@ function get(key) {
 function set(key, value) {
   firebase
     .database()
-    .ref("/")
+    .ref(`/`)
     .update({ [key]: value });
 }
 
