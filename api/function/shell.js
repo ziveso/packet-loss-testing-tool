@@ -13,13 +13,13 @@ function echo() {
 
 function routerIP(os) {
   return new Promise((resolve, reject) => {
-    if(os.substring(0,3) === 'Mac') {
+    if (os.substring(0, 3) === 'Mac') {
       exec('netstat -nr | grep default', (error, stdout, stderr) => {
-        if(error) return reject(false)
-        if(stderr) return reject(false)
+        if (error) return reject(false)
+        if (stderr) return reject(false)
         const ip = stdout.split(" ")
-        for(var i = 0; i < ip.length; i++) {
-          if(ValidateIPaddress(ip[i])) {
+        for (var i = 0; i < ip.length; i++) {
+          if (ValidateIPaddress(ip[i])) {
             resolve(ip[i])
           }
         }
@@ -27,8 +27,8 @@ function routerIP(os) {
       })
     } else {
       exec('netstat -nr', (error, stdout, stderr) => {
-        if(error) return reject(false)
-        if(stderr) return reject(false)
+        if (error) return reject(false)
+        if (stderr) return reject(false)
         const ip = stdout.split("/n")
         resolve(ip)
         // for(var i = 0; i < ip.length; i++) {
@@ -43,9 +43,11 @@ function routerIP(os) {
 }
 
 function myIP() {
-  axios.get('https://api.ipify.org?format=json').then(({data}) => {
-    return data.ip;
-  });
+  return new Promise((resolved, reject) => {
+    axios.get('https://api.ipify.org?format=json').then(({ data }) => {
+      resolved(data.ip)
+    }).catch(err => reject(err))
+  })
 }
 
 function pingIP(ipaddress, numberOfTimes) {
@@ -72,13 +74,13 @@ function getIP(url) {
   });
 }
 
-function ValidateIPaddress(ipaddress) {  
-  if (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipaddress)) {  
-    return (true)  
-  }  
-  return (false)  
-}  
+function ValidateIPaddress(ipaddress) {
+  if (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipaddress)) {
+    return (true)
+  }
+  return (false)
+}
 
 const cmd = "ping -c 10 localhost";
 
-module.exports = {getIP, pingIP, routerIP}
+module.exports = { getIP, pingIP, routerIP, myIP }

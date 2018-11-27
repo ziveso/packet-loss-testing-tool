@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { observer } from "mobx-react";
 import { Row, Col } from "antd";
+import axios from 'axios'
 import firebase from "firebase/app";
 import IpFinder from "./components/IpFinder";
 import Packetloss from "./components/Packetloss";
@@ -16,13 +17,22 @@ class App extends Component {
     firebase.initializeApp({
       databaseURL: `ws://localhost:5556`
     });
+    this.state = {
+      myip: null
+    }
+  }
+
+  componentDidMount() {
+    axios.get('/myIP').then((res) => {
+      this.setState({ myip: res.data })
+    }).catch(err => console.error(err))
   }
   render() {
     return (
       <div className="App">
         <h1>Packet loss testing tool</h1>
         <div>Your router ip address is : {store.routerIp.get()}</div>
-        <div>Your ip adress is : </div>
+        <div>Your ip adress is : {this.state.myip}</div>
         <Row style={{ margin: "20px 0" }}>
           <Col md={12}>
             <Packetloss store={store} />
