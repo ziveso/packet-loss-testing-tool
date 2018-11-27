@@ -27,16 +27,11 @@ function routerIP(os) {
       })
     } else {
       exec('netstat -nr', (error, stdout, stderr) => {
-        if (error) return reject(false)
-        if (stderr) return reject(false)
-        const ip = stdout.split("/n")
-        resolve(ip)
-        // for(var i = 0; i < ip.length; i++) {
-        //   if(ValidateIPaddress(ip[i])) {
-        //     resolve(ip[i])
-        //   }
-        // }
-        // reject(false)
+        if(error) return reject(false)
+        if(stderr) return reject(false)
+        const output = stdout.split("\n")
+        const ip = output[15].trim().split(/  /g)
+        resolve(ip[7])
       })
     }
   })
