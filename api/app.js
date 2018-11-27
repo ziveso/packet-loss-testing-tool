@@ -12,6 +12,8 @@ app.get("/", async (req, res) => {
 app.get("/routerIP", async (req, res) => {
   const ip = routerIP().then((data) => {
     res.send(data)
+  }).catch(err => {
+    console.log(err)
   })
 })
 

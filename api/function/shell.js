@@ -13,8 +13,8 @@ function echo() {
 function routerIP() {
   return new Promise((resolve, reject) => {
     exec('netstat -nr | grep default', (error, stdout, stderr) => {
-      if(error) return reject(false)
-      if(stderr) return reject(false)
+      if(error) return reject(error)
+      if(stderr) return reject(stderr)
       const ip = stdout.split(" ")
       for(var i = 0; i < ip.length; i++) {
         if(ValidateIPaddress(ip[i])) {
