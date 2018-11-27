@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { observer } from "mobx-react";
-import { Button, Radio, Progress } from "antd";
+import { Button, Radio, Progress, message } from "antd";
 
 const RadioGroup = Radio.Group;
 const radioStyle = {
@@ -28,7 +28,11 @@ export class Packetloss extends Component {
     this.setState({ pinging: true });
     this.props.store
       .ping(this.props.store.selectedValue.get())
-      .then(res => this.setState({ loss: res, pinging: false }));
+      .then(res => this.setState({ loss: res, pinging: false }))
+      .catch(err => {
+        message.error(err);
+        this.setState({ pinging: false });
+      });
   }
 
   render() {
@@ -40,7 +44,7 @@ export class Packetloss extends Component {
       );
     });
     return (
-      <div style={{ textAlign: "left", padding: "0 30px" }}>
+      <div style={{}}>
         <RadioGroup
           onChange={this.onChange}
           value={this.props.store.selectedValue.get()}
@@ -51,8 +55,9 @@ export class Packetloss extends Component {
         <Button onClick={this.ping} loading={this.state.pinging}>
           Check
         </Button>
+        <br />
         {this.props.store.progress.get() === 0 ? null : (
-          <div style={{ width: "250px" }}>
+          <div style={{ width: "250px", margin: "auto" }}>
             <Progress percent={this.props.store.progress.get()} />
           </div>
         )}
