@@ -25,7 +25,7 @@ app.get("/routerIP", async (req, res) => {
 
 app.get("/pingIP/:ip", async (req, res) => {
   const ping = pingIP(req.params.ip, parseInt(req.query.time)).then((data) => {
-    set(moment().format('YYYY-MM-DD-HH:mm'), data)
+    set(moment().format('YYYY-MM-DD-HH:mm:ss'), data)
     res.send(data)
   }).catch(err => console.error(err))
 })
