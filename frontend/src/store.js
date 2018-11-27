@@ -1,8 +1,8 @@
 import axios from "axios";
-import { observable } from "mobx";
+import { observable, autorun } from "mobx";
 
 function getRouterIp() {
-  return axios.get("/routerip");
+  return axios.get(`/routerip?os=${window.navigator.platform}`);
 }
 
 class Store {
@@ -11,6 +11,8 @@ class Store {
   ips = observable([]);
   selectedValue = observable.box("");
   progress = observable.box(0);
+  continuous = observable.box(false);
+  thread = 0;
 
   constructor() {
     getRouterIp().then(res => {
@@ -18,10 +20,22 @@ class Store {
       this.ips[0] = { name: "router ip", value: res.data };
       this.selectedValue.set(res.data);
     });
+    autorun(
+      () => {
+        if (this.continuous.get()) {
+          this.thread = setInterval(() => {
+            console.log("ping");
+            this.ping(this.selectedValue.get(), 1);
+          }, 1000);
+        } else {
+          clearInterval(this.thread);
+        }
+      },
+      { delay: 300 }
+    );
   }
 
-  ping = address => {
-    const time = 30;
+  ping = (address, time = 30) => {
     let count = 1;
     const progress = setInterval(() => {
       this.progress.set((count * 100) / time);

@@ -1,5 +1,8 @@
 import React, { Component } from "react";
+import { Button } from "antd";
+import { observer } from "mobx-react";
 import { Line } from "react-chartjs-2";
+import firebase from "firebase";
 
 const data = {
   labels: ["January", "February", "March", "April", "May", "June", "July"],
@@ -7,36 +10,49 @@ const data = {
     {
       label: "My First dataset",
       fill: false,
-      lineTension: 0.1,
-      backgroundColor: "rgba(75,192,192,0.4)",
-      borderColor: "rgba(75,192,192,1)",
-      borderCapStyle: "butt",
-      borderDash: [],
-      borderDashOffset: 0.0,
-      borderJoinStyle: "miter",
-      pointBorderColor: "rgba(75,192,192,1)",
-      pointBackgroundColor: "#fff",
-      pointBorderWidth: 1,
-      pointHoverRadius: 5,
-      pointHoverBackgroundColor: "rgba(75,192,192,1)",
-      pointHoverBorderColor: "rgba(220,220,220,1)",
-      pointHoverBorderWidth: 2,
-      pointRadius: 1,
-      pointHitRadius: 10,
       data: [65, 59, 80, 81, 56, 55, 40]
     }
   ]
 };
 
 export class Graph extends Component {
+  constructor(props) {
+    super(props);
+    this.start = this.start.bind(this);
+    this.stop = this.stop.bind(this);
+  }
+
+  componentDidMount() {
+    firebase
+      .database()
+      .ref("/")
+      .on("value", snap => {
+        // const data = snap.map(item => item.val());
+        console.log(snap.val());
+      });
+  }
+
+  start() {
+    this.props.store.continuous.set(true);
+  }
+  stop() {
+    this.props.store.continuous.set(false);
+  }
+
   render() {
     return (
       <div>
-        Graph
-        <Line data={data} />
+        {!this.props.store.continuous.get() ? (
+          <Button onClick={this.start}>check continuously</Button>
+        ) : (
+          <Button onClick={this.stop}>Stop</Button>
+        )}
+        <div style={{ maxWidth: "500px", margin: "auto" }}>
+          <Line data={data} />
+        </div>
       </div>
     );
   }
 }
 
-export default Graph;
+export default observer(Graph);
