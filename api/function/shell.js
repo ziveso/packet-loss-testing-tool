@@ -51,10 +51,15 @@ function myIP() {
 function pingIP(ipaddress, numberOfTimes) {
   return new Promise((resolve, reject) => {
     exec(`ping -c ${numberOfTimes} ${ipaddress}`, (error, stdout, stderr) => {
-      if (error) return reject(error);
-      if (stderr) return reject(stderr);
+      // if (error) return reject(error);
+      // if (stderr) return reject(stderr);
       const output = stdout.split("\n");
-      const stat = output[numberOfTimes + 3].split(" ");
+      let stat;
+      if (output[output.length - 2].substring(0, 1) === "r") {
+        stat = output[output.length - 3].split(" ");
+      } else {
+        stat = output[output.length - 2].split(" ");
+      }
       resolve(stat[6]);
     });
   });
