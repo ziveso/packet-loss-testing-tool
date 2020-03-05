@@ -25,11 +25,15 @@ open 2 terminals
 
 ```$ cd api```
 
+```$ yarn ```
+
 ```$ yarn start```
 
 <b>second terminal run</b>
 
 ```$ cd frontend```
+
+```$ yarn ```
 
 ```$ yarn start```
 
