@@ -9,7 +9,7 @@
     "express": "^4.16.4",
     "firebase": "^5.5.9",
     "firebase-server": "^1.0.0",
-    "moment": "^2.22.2"
+    "moment": "^2.29.4"
   },
   "scripts": {
     "start": "node app.js",
